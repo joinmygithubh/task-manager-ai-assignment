@@ -5,9 +5,6 @@ import TaskForm from './components/TaskForm'
 import TaskList from './components/TaskList'
 import FilterBar from './components/FilterBar'
 
-const API_URL = "https://task-manager-ai-assignment-backend.onrender.com";
-
-
 function App() {
   const [tasks, setTasks] = useState([])
   const [filter, setFilter] = useState('all') // 'all', 'active', 'completed'
@@ -24,7 +21,7 @@ function App() {
     try {
       setLoading(true)
       setError(null)
-      const response = await fetch(`${API_URL}/api/tasks`)
+      const response = await fetch('/api/tasks')
 
       if (!response.ok) {
         throw new Error('Failed to fetch tasks')
@@ -43,7 +40,7 @@ function App() {
   // AI-generated, reviewed and modified
   const handleAddTask = async (taskData) => {
     try {
-      const response = await fetch(`${API_URL}/api/tasks/${id}`, {
+      const response = await fetch('/api/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +68,7 @@ function App() {
     if (!task) return
 
     try {
-      const response = await fetch(`${API_URL}/api/tasks/${id}`, {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +95,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/tasks/${id}`, {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'DELETE',
       })
 
