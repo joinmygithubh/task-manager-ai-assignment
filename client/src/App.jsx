@@ -5,14 +5,15 @@ import TaskForm from './components/TaskForm'
 import TaskList from './components/TaskList'
 import FilterBar from './components/FilterBar'
 
+// Render Backend API
+const API_URL = "https://task-manager-ai-assign.onrender.com"
+
 function App() {
   const [tasks, setTasks] = useState([])
-  const [filter, setFilter] = useState('all') // 'all', 'active', 'completed'
+  const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // AI-generated, reviewed and modified
-  // Fetch tasks from API
   useEffect(() => {
     fetchTasks()
   }, [])
@@ -21,7 +22,8 @@ function App() {
     try {
       setLoading(true)
       setError(null)
-      const response = await fetch('/api/tasks')
+
+      const response = await fetch(`${API_URL}/api/tasks`)
 
       if (!response.ok) {
         throw new Error('Failed to fetch tasks')
@@ -37,10 +39,9 @@ function App() {
     }
   }
 
-  // AI-generated, reviewed and modified
   const handleAddTask = async (taskData) => {
     try {
-      const response = await fetch('/api/tasks', {
+      const response = await fetch(`${API_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,6 +56,7 @@ function App() {
 
       const result = await response.json()
       setTasks([...tasks, result.data])
+
       return { success: true }
     } catch (err) {
       console.error('Error adding task:', err)
@@ -62,13 +64,12 @@ function App() {
     }
   }
 
-  // AI-generated, reviewed and modified
   const handleToggleComplete = async (id) => {
     const task = tasks.find(t => t.id === id)
     if (!task) return
 
     try {
-      const response = await fetch(`/api/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/api/tasks/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -88,14 +89,13 @@ function App() {
     }
   }
 
-  // AI-generated, reviewed and modified
   const handleDeleteTask = async (id) => {
     if (!window.confirm('Are you sure you want to delete this task?')) {
       return
     }
 
     try {
-      const response = await fetch(`/api/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/api/tasks/${id}`, {
         method: 'DELETE',
       })
 
@@ -110,12 +110,10 @@ function App() {
     }
   }
 
-  // AI-generated, reviewed and modified
-  // Filter tasks based on current filter
   const filteredTasks = tasks.filter(task => {
     if (filter === 'active') return !task.completed
     if (filter === 'completed') return task.completed
-    return true // 'all'
+    return true
   })
 
   const taskStats = {
